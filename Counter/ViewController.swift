@@ -31,7 +31,9 @@ class ViewController: UIViewController {
         clearButtom.backgroundColor = .gray
         //changeButton.setTitle("Увеличить", for: .normal)
         //changeButton.titleLabel?.font = .systemFont(ofSize: 30)
+        counterText.font = .systemFont(ofSize: 50)
         historyChanges.text = "История изменений:"
+        historyChanges.isEditable = false
         
         //let date = dateFormatter.date(from: "01/16/2023")
         //dateFormatter.string(from: Date())
