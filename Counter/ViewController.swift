@@ -9,60 +9,33 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var historyChanges: UITextView!
-    @IBOutlet weak var clearButtom: UIButton!
-    @IBOutlet weak var decreaseButton: UIButton!
-    @IBOutlet weak var increaseButton: UIButton!
-    //@IBOutlet weak var changeButton: UIButton!
-    @IBOutlet weak var counterText: UILabel!
+    @IBOutlet private weak var historyTextView: UITextView!
+    @IBOutlet private weak var clearButton: UIButton!
+    @IBOutlet private weak var decreaseButton: UIButton!
+    @IBOutlet private weak var increaseButton: UIButton!
+    @IBOutlet private weak var counterLabel: UILabel!
     
     private var counter: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        counterText.text = "Значение счётчика: " + String(counter)
-        counterText.adjustsFontSizeToFitWidth = true
+        counterLabel.text = "Значение счётчика: " + String(counter)
+        counterLabel.adjustsFontSizeToFitWidth = true
         increaseButton.tintColor = .red
         increaseButton.backgroundColor = .gray
         decreaseButton.tintColor = .blue
         decreaseButton.backgroundColor = .gray
-        clearButtom.tintColor = .white
-        clearButtom.backgroundColor = .gray
-        //changeButton.setTitle("Увеличить", for: .normal)
-        //changeButton.titleLabel?.font = .systemFont(ofSize: 30)
-        counterText.font = .systemFont(ofSize: 50)
-        historyChanges.text = "История изменений:"
-        historyChanges.isEditable = false
+        clearButton.tintColor = .white
+        clearButton.backgroundColor = .gray
+        counterLabel.font = .systemFont(ofSize: 50)
+        historyTextView.text = "История изменений:"
+        historyTextView.isEditable = false
+        historyTextView.scrollsToTop = true
         
-        //let date = dateFormatter.date(from: "01/16/2023")
-        //dateFormatter.string(from: Date())
-    }
-    
-    @IBAction func increaseButtonTap(_ sender: Any) {
-        counter += 1
-        displayCounter()
-        historyChanges.text += "\n[" + getDate() + "]: значение изменено на +1"
-    }
-    
-    @IBAction func descreaseButtonTap(_ sender: Any) {
-        if counter > 0 {
-            counter -= 1
-            historyChanges.text += "\n[" + getDate() + "]: значение изменено на -1"
-        } else {
-            historyChanges.text += "\n[" + getDate() + "]:попытка уменьшить значение счётчика ниже 0"
-        }
-        displayCounter()
-    }
-    
-    @IBAction func clearButtonTap(_ sender: Any) {
-        counter = 0
-        displayCounter()
-        historyChanges.text += "\n[" + getDate() + "]: значение сброшено"
     }
     
     private func displayCounter(){
-        counterText.text = "Значение счётчика: " + String(counter)
+        counterLabel.text = "Значение счётчика: " + String(counter)
     }
     
     private func getDate() -> String{
@@ -71,9 +44,33 @@ class ViewController: UIViewController {
         let dateAndTime = dateFormatter.string(from: Date())
         return dateAndTime
     }
-    /*@IBAction func buttonDidTap(_ sender: Any) {
+    
+    private func addToHistory(_ change: String){
+        let timestamp = getDate()
+        historyTextView.text += "\n[" + timestamp + change
+        let bottom = NSMakeRange(historyTextView.text.count, 1)
+        historyTextView.scrollRangeToVisible(bottom)
+    }
+    @IBAction private func increaseButtonTap(_ sender: Any) {
         counter += 1
-        counterText.text = "Значение счётчика: " + String(counter)
-    }*/
+        displayCounter()
+        addToHistory("]: значение изменено на +1")
+    }
+    
+    @IBAction private func decreaseButtonTap(_ sender: Any) {
+        if counter > 0 {
+            counter -= 1
+            addToHistory("]: значение изменено на -1")
+        } else {
+            addToHistory("]:попытка уменьшить значение счётчика ниже 0")
+        }
+        displayCounter()
+    }
+    
+    @IBAction private func clearButtonTap(_ sender: Any) {
+        counter = 0
+        displayCounter()
+        addToHistory("]: значение сброшено")
+    }
 }
 
